@@ -15,7 +15,7 @@ const authConfig = {
     },
     async signIn({ user, account, profile }) {
       try {
-        const existingGuest = await getGuest(user);
+        const existingGuest = await getGuest(user.email);
 
         if (!existingGuest)
           await createGuest({ email: user.email, fullName: user.name });
@@ -27,11 +27,13 @@ const authConfig = {
     },
     async session({ session, user }) {
       const guest = await getGuest(session.user.email);
-      session.user.guestId = guest.guestId;
+      session.user.guestId = guest.id;
       return session;
     },
   },
-  pages: { signIn: "/login" },
+  pages: {
+    signIn: "/login",
+  },
 };
 
 export const {
